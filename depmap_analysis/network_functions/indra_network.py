@@ -8,6 +8,7 @@ import requests
 import networkx as nx
 from networkx import NodeNotFound, NetworkXNoPath
 
+from indra_depmap_service.util import find_related_hashes
 from indra.config import CONFIG_DICT
 from indra.databases import get_identifiers_url
 from indra.assemblers.indranet.net import default_sign_dict
