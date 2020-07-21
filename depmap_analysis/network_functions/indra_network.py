@@ -616,18 +616,10 @@ class IndraNetwork:
                             if options['weight'] else '')
             if options['sign'] is None:
                 # Do unsigned path search
-<<<<<<< HEAD
                 paths = shortest_simple_paths(self.nx_dir_graph_repr,
                                               source, target,
                                               options['weight'],
                                               **blacklist_options)
-=======
-                search_graph = self.nx_dir_graph_repr
-                paths = shortest_simple_paths(search_graph,
-                                                 source, target,
-                                                 options['weight'],
-                                                 **blacklist_options)
->>>>>>> Filter edges instead of building subgraph
                 subj = source
                 obj = target
             else:
