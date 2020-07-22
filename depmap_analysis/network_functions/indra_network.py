@@ -1287,23 +1287,23 @@ class IndraNetwork:
             i = 0
             try:
                 stmt_edge = self.signed_edges[(s, o, sign)][
-                    'statements'][index]
+                    'statements'][i]
                 while stmt_edge:
                     yield stmt_edge
                     i += 1
                     stmt_edge = self.signed_edges[(s, o, sign)][
-                        'statements'][index]
+                        'statements'][i]
             except IndexError:
                 return
 
         else:
             i = 0
             try:
-                stmt_edge = self.dir_edges[(s, o)]['statements'][index]
+                stmt_edge = self.dir_edges[(s, o)]['statements'][i]
                 while stmt_edge:
                     yield stmt_edge
                     i += 1
-                    stmt_edge = self.dir_edges[(s, o)]['statements'][index]
+                    stmt_edge = self.dir_edges[(s, o)]['statements'][i]
             except IndexError:
                 return
 
