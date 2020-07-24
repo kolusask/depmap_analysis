@@ -228,6 +228,7 @@ class IndraNetwork:
         boptions['source'] = options.get('target')
         boptions['target'] = options.get('source')
 
+        self.hashes_with_mesh_ids = find_related_hashes(options['mesh_ids']) 
         # Special case: 1 or 2 unweighted, unsigned edges only
         if not options['weight'] and options['path_length'] in [1, 2]:
             ksp_forward = self._unweighted_direct(**options)
@@ -607,10 +608,18 @@ class IndraNetwork:
                             if options['weight'] else '')
             if options['sign'] is None:
                 # Do unsigned path search
+<<<<<<< HEAD
                 paths = shortest_simple_paths(self.nx_dir_graph_repr,
                                               source, target,
                                               options['weight'],
                                               **blacklist_options)
+=======
+                search_graph = self.nx_dir_graph_repr
+                paths = shortest_simple_paths(search_graph,
+                                                 source, target,
+                                                 options['weight'],
+                                                 **blacklist_options)
+>>>>>>> Filter edges instead of building subgraph
                 subj = source
                 obj = target
             else:
@@ -626,11 +635,7 @@ class IndraNetwork:
                 signed_blacklisted_nodes = []
                 for n in options.get('node_blacklist', []):
                     signed_blacklisted_nodes += [(n, INT_PLUS), (n, INT_MINUS)]
-                if not options['mesh_ids']:
-                    search_graph = self.sign_node_graph_repr
-                else:
-                    search_graph = get_subgraph_from_mesh_ids(
-                        self.sign_node_graph_repr, options['mesh_ids'])
+                search_graph = self.sign_node_graph_repr
                 paths = shortest_simple_paths(
                     search_graph, subj, obj, options['weight'],
                     ignore_nodes=signed_blacklisted_nodes)
@@ -1400,6 +1405,13 @@ class IndraNetwork:
             if self.verbose > 3:
                 logger.info('hash %s is blacklisted, skipping' %
                             edge_stmt['stmt_hash'])
+            return False
+
+        # Filter based on mesh ids
+        if self.hashes_with_mesh_ids and \
+                edge_stmt['stmt_hash'] not in self.hashes_with_mesh_ids:
+            if self.verbose > 3:
+                logger.info('hash %s is not related to supplied mesh ids')
             return False
 
         # Return True is all filters were passed
